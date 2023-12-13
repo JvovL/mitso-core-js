@@ -1,3 +1,8 @@
+/* eslint-disable arrow-parens */
+/* eslint-disable no-plusplus */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable max-classes-per-file */
+/* eslint-disable no-undef */
 /* ************************************************************************************************
  *                                                                                                *
  * Please read the following tutorial before implementing tasks:                                   *
@@ -19,8 +24,14 @@
  *    console.log(r.height);      // => 20
  *    console.log(r.getArea());   // => 200
  */
-function Rectangle(/* width, height */) {
-  throw new Error('Not implemented');
+function Rectangle(width, height) {
+  this.width = width;
+  this.height = height;
+
+  // eslint-disable-next-line func-names
+  this.getArea = function () {
+    return this.width * this.height;
+  };
 }
 
 /**
@@ -33,8 +44,8 @@ function Rectangle(/* width, height */) {
  *    [1,2,3]   =>  '[1,2,3]'
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
-function getJSON(/* obj */) {
-  throw new Error('Not implemented');
+function getJSON(obj) {
+  return JSON.stringify(obj);
 }
 
 /**
@@ -48,8 +59,9 @@ function getJSON(/* obj */) {
  *    const r = fromJSON(Circle.prototype, '{"radius":10}');
  *
  */
-function fromJSON(/* proto, json */) {
-  throw new Error('Not implemented');
+function fromJSON(proto, json) {
+  const parsed = JSON.parse(json);
+  return Object.setPrototypeOf(parsed, proto);
 }
 
 /**
@@ -106,33 +118,78 @@ function fromJSON(/* proto, json */) {
  *  For more examples see unit tests.
  */
 
+class CSSSelector {
+  constructor() {
+    this.selectors = [];
+  }
+
+  element(value) {
+    this.selectors.push(value);
+    return this;
+  }
+
+  id(value) {
+    this.selectors.push(`#${value}`);
+    return this;
+  }
+
+  class(value) {
+    this.selectors.push(`.${value}`);
+    return this;
+  }
+
+  attr(value) {
+    this.selectors.push(`[${value}]`);
+    return this;
+  }
+
+  pseudoClass(value) {
+    this.selectors.push(`:${value}`);
+    return this;
+  }
+
+  pseudoElement(value) {
+    this.selectors.push(`::${value}`);
+    return this;
+  }
+
+  combine(selector1, combinator, selector2) {
+    const combined = `${selector1.stringify()} ${combinator} ${selector2.stringify()}`;
+    return new CSSSelector().element(combined);
+  }
+
+  stringify() {
+    return this.selectors.join('');
+  }
+}
+
 const cssSelectorBuilder = {
-  element(/* value */) {
-    throw new Error('Not implemented');
+  element(value) {
+    return new CSSSelector().element(value);
   },
 
-  id(/* value */) {
-    throw new Error('Not implemented');
+  id(value) {
+    return new CSSSelector().id(value);
   },
 
-  class(/* value */) {
-    throw new Error('Not implemented');
+  class(value) {
+    return new CSSSelector().class(value);
   },
 
-  attr(/* value */) {
-    throw new Error('Not implemented');
+  attr(value) {
+    return new CSSSelector().attr(value);
   },
 
-  pseudoClass(/* value */) {
-    throw new Error('Not implemented');
+  pseudoClass(value) {
+    return new CSSSelector().pseudoClass(value);
   },
 
-  pseudoElement(/* value */) {
-    throw new Error('Not implemented');
+  pseudoElement(value) {
+    return new CSSSelector().pseudoElement(value);
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  combine(selector1, combinator, selector2) {
+    return new CSSSelector().combine(selector1, combinator, selector2);
   },
 };
 
